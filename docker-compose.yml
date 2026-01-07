@@ -1,20 +1,20 @@
 version: "3.9"
 
 services:
-  api:
-    build: 
-      context: .
-      dockerfile : docker/python/Dockerfile
-    container_name: fastapi-api
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-    volumes:
-      - .:/app
-    ports:
-      - "8000:8000"
-    environment:
-      DATABASE_URL: postgresql+psycopg://fastapi:fastapi@db:5432/ecommerce
-    depends_on:
-      - db
+#  api:
+#    build:
+#      context: .
+#      dockerfile : docker/python/Dockerfile
+#    container_name: fastapi-api
+#    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+#    volumes:
+#      - .:/app
+#    ports:
+#      - "8000:8000"
+#    environment:
+#      DATABASE_URL: postgresql+psycopg://fastapi:fastapi@db:5432/ecommerce
+#    depends_on:
+#      - db
 
   db:
     image: postgres:16
@@ -23,6 +23,7 @@ services:
       POSTGRES_DB: ecommerce
       POSTGRES_USER: fastapi
       POSTGRES_PASSWORD: fastapi
+      POSTGRES_HOST_AUTH_METHOD: trust
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:

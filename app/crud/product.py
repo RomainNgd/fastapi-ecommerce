@@ -1,9 +1,13 @@
 from sqlalchemy.orm import Session
 from app.models.product import Product
 from app.schemas.product import ProductCreate
+from app.models.user import User
 
-def create_product(db: Session, product: ProductCreate):
-    db_product = Product(**product.model_dump())
+def create_product(db: Session, product: ProductCreate, owner: User):
+    db_product = Product(
+        **product.model_dump(),
+        owner_id=owner.id
+    )
     db.add(db_product)
     db.commit()
     db.refresh(db_product)

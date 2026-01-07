@@ -1,5 +1,5 @@
 from sqlalchemy import String, Integer
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
 
 class User(Base):
@@ -8,3 +8,7 @@ class User(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
     password: Mapped[str] = mapped_column(String(255))
+    products: Mapped[list["Product"]] = relationship(
+        back_populates="owner",
+        cascade="all, delete"
+    )

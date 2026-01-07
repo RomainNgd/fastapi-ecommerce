@@ -7,6 +7,7 @@ class ProductCreate(BaseModel):
 
 class ProductRead(ProductCreate):
     id: int
+    owner_id: int
 
     class Config:
         from_attributes = True

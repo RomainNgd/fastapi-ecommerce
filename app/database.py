@@ -2,7 +2,7 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = "postgresql+psycopg://fastapi:fastapi@localhost:5432/ecommerce"
 
 engine = create_engine(DATABASE_URL, echo=True)
 

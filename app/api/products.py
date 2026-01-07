@@ -4,7 +4,8 @@ from sqlalchemy.orm import Session
 from app.database import SessionLocal
 from app.schemas.product import ProductCreate, ProductRead
 from app.crud import product as crud
-from app.core.deps import get_current_user
+from app.core.deps import get_current_user, is_authenticated, get_db
+from app.models.user import User
 
 router = APIRouter(prefix="/products", tags=["Products"])
 
@@ -16,8 +17,12 @@ def get_db():
         db.close()
 
 @router.post("/", response_model=ProductRead)
-def create(product: ProductCreate, db: Session = Depends(get_db)):
-    return crud.create_product(db, product)
+def create(
+    product: ProductCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return crud.create_product(db, product, current_user)
 
 @router.get("/", response_model=list[ProductRead])
 def read_all(db: Session = Depends(get_db)):
@@ -26,7 +31,7 @@ def read_all(db: Session = Depends(get_db)):
 @router.get("/{product_id}", response_model=ProductRead)
 def read_one(
     product_id: int,
-    user: str = Depends(get_current_user),
+    user: str = Depends(is_authenticated),
     db: Session = Depends(get_db)
     ):
     product = crud.get_product(db, product_id)
